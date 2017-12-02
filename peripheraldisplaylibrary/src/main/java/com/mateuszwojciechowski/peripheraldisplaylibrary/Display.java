@@ -1,4 +1,4 @@
-package PeripheralDisplayLibrary;
+package com.mateuszwojciechowski.peripheraldisplaylibrary;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -193,7 +193,7 @@ public class Display {
     }
 
     /**
-     * Funkcja przełączająca diodę w tryb pulsowania
+     * Funkcja przełączająca diodę w tryb pulsowania z domyślnym okresem pulsowania
      * @param diode numer diody
      */
     public void pulse(int diode) {
@@ -201,6 +201,19 @@ public class Display {
             return;
         }
         thread.addToQueue(new DisplayPulseCommand(diode));
+        new EventLog(EventLog.getPulseLog(diode));
+    }
+
+    /**
+     * Funkcja przełączająca diodę w tryb pulsowania
+     * @param diode numer diody
+     * @param time okres pulsowania w ms
+     */
+    public void pulse(int diode, int time) {
+        if (!connected) {
+            return;
+        }
+        thread.addToQueue(new DisplayPulseCommand(diode, time));
         new EventLog(EventLog.getPulseLog(diode));
     }
 

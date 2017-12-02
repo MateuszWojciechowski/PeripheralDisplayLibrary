@@ -1,4 +1,4 @@
-package PeripheralDisplayLibrary;
+package com.mateuszwojciechowski.peripheraldisplaylibrary;
 
 /**
  * Klasa reprezentująca komendę pulsowania wysyłaną do wyświetlacza
