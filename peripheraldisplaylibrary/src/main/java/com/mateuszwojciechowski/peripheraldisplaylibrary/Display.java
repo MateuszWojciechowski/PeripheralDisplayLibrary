@@ -13,6 +13,8 @@ import android.os.SystemClock;
 import android.util.Log;
 
 import java.util.LinkedList;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 
@@ -102,6 +104,16 @@ public class Display {
             mBluetoothGattCharacteristic = mBluetoothGattService.getCharacteristic(CHARACTERISTIC_UUID);
         }
     };
+    private Timer timer;
+    private TimerTask task = new TimerTask() {
+        @Override
+        public void run() {
+            connect();
+            mBluetoothGattCharacteristic.setValue("keepalive;");
+            mBluetoothGatt.writeCharacteristic(mBluetoothGattCharacteristic);
+            disconnect();
+        }
+    };
 
     /**
      * Kolor czerwony.
@@ -149,7 +161,9 @@ public class Display {
         mBluetoothAdapter = mBluetoothManager.getAdapter();
         mBluetoothDevice = mBluetoothAdapter.getRemoteDevice(DEVICE_ADDRESS);
         mContext = context;
-        thread = new DisplayThread();
+        thread = new DisplayThread();   //uruchamia klasę obsługującą wątek wysyłania
+        timer = new Timer();
+        timer.schedule(task, 150000, 300000);   //ustawia wysyłanie keepalive co 5min
     }
 
     /**
@@ -157,9 +171,15 @@ public class Display {
      */
     public void connect() {
         if (mBluetoothGatt == null) {
+            int i = 0;
             while(!connected) {
+                i++;
                 mBluetoothGatt = mBluetoothDevice.connectGatt(mContext, false, gattCallback);
                 SystemClock.sleep(2000);
+                if(i == 10) {
+                    new EventLog(EventLog.getConnectionFailureLog());
+                    return;
+                }
             }
             new EventLog(EventLog.getConnectLog());
         }

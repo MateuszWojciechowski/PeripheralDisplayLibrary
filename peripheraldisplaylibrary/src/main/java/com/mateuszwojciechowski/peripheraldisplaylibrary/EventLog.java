@@ -84,6 +84,10 @@ class EventLog {
         return (getTimestamp() + "CONNECTED").replaceAll(" ", "%20");
     }
 
+    public static String getConnectionFailureLog() {
+        return (getTimestamp() + "CONNECTION FAILURE").replaceAll(" ", "%20");
+    }
+
     public static String getDisconnectedLog() {
         return (getTimestamp() + "DISCONNECTED").replaceAll(" ", "%20");
     }
