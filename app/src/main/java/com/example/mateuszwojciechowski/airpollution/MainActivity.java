@@ -31,7 +31,8 @@ public class MainActivity extends AppCompatActivity {
     private JobInfo jobInfo;
     private BluetoothManager manager;
     private final int REQUEST_ENABLE_BT = 1;
-    private Display disp;
+    //private Display disp;
+    private com.mateuszwojciechowski.peripheraldisplaylibrary.Display disp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         manager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        disp = new Display(getApplicationContext(), manager);
+        disp = new com.mateuszwojciechowski.peripheraldisplaylibrary.Display(getApplicationContext(), manager);
 
         jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
         JobInfo.Builder builder = new JobInfo.Builder(1, new ComponentName(getPackageName(), UpdateDisplayJob.class.getName()));
